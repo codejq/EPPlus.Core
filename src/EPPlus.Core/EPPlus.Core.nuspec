@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>EPPlus.Core.CoreCompat</id>
+    <version>1.5.6</version>
+    <title>EPPlus.Core</title>
+    <authors>Codejq</authors>
+    <owners>Codejq</owners>
+    <licenseUrl>https://github.com/codejq/EPPlus.Core</licenseUrl>
+    <projectUrl>https://github.com/codejq/EPPlus.Core/blob/master/LICENSE.md</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>      EPPlus.Core is an unofficial port of the EPPlus library to .NET Core. with CoreCompat lib instead
+     of the standerd System.Drawing  target net core 2.2 and later </description>
+    <releaseNotes>with CoreCompat lib.</releaseNotes>
+    <copyright>Copyright 2019</copyright>
+    <tags>EPPlus aspnetcore Excel Export  Report Reporting OOXML CoreCompat</tags>
+  </metadata>
+</package>

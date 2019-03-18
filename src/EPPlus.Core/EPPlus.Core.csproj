@@ -50,6 +50,7 @@
 
   <PropertyGroup>
     <DefineConstants>NETSTANDARD2_0;NO_SFX</DefineConstants>
+    <Version>1.5.6</Version>
   </PropertyGroup>
   
 </Project>
