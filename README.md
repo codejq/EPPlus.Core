@@ -1,33 +1,32 @@
 News
 ===========
 
-[This project](https://github.com/VahidN/EPPlus.Core/issues/37) helped EPPlus to add .NET Core support. Please start using the original [EPPlus](https://www.nuget.org/packages/EPPlus/). [It supports](https://github.com/JanKallman/EPPlus) .NETFramework 3.5, .NETFramework 4.0 & .NETStandard 2.0 now.
+ [This project](https://github.com/codejq/EPPlus.Core/) is a branch of  [This project](https://github.com/VahidN/EPPlus.Core/issues/37) helped EPPlus to add .NET Core support. due the fact that the performance  of System.Drawing.Common  non-Windows operating systems is very poor, so i mantian this brance for  for project still using CoreCompat.System.Drawing which targets  non-Windows operating systems
 
 ---------------------------------
 
-EPPlus.Core
+EPPlus.Core.CoreCompat
 ===========
 
-`EPPlus.Core` is an **unofficial** port of the [EPPlus library](http://epplus.codeplex.com) to .NET Core.
+`EPPlus.Core.CoreCompat` is an **unofficial** port of the [EPPlus library](http://epplus.codeplex.com) to .NET Core.
 It's based on the [5/24/2017, change set#fcded570d92e](http://epplus.codeplex.com/SourceControl/list/changesets).
 
 
 Install via NuGet
 -----------------
 
-To install EPPlus.Core, run the following command in the Package Manager Console:
+To install EPPlus.Core.CoreCompat, run the following command in the Package Manager Console:
 
 ```
-PM> Install-Package EPPlus.Core
+PM> Install-Package EPPlus.Core.CoreCompat
 ```
 
-You can also view the [package page](http://www.nuget.org/packages/EPPlus.Core/) on NuGet.
+You can also view the [package page](http://www.nuget.org/packages/EPPlus.Core.CoreCompat/) on NuGet.
 
 
 Usage
 ------
 
-- [Functional Tests](/src/EPPlus.Core.FunctionalTests)
 - [A sample ASP.NET Core App](/src/EPPlus.Core.SampleWebApp)
 
 
