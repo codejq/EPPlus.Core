@@ -1,7 +1,7 @@
 News
 ===========
 
- [This project] (https://github.com/codejq/EPPlus.Core/ ) is a branch of  [This project](https://github.com/VahidN/EPPlus.Core/issues/37) helped EPPlus to add .NET Core support. due the fact that the performance  of System.Drawing.Common  non-Windows operating systems is very poor, so i mantian this brance for  for project still using CoreCompat.System.Drawing which targets  non-Windows operating systems
+ [This project](https://github.com/codejq/EPPlus.Core/) is a branch of  [This project](https://github.com/VahidN/EPPlus.Core/issues/37) helped EPPlus to add .NET Core support. due the fact that the performance  of System.Drawing.Common  non-Windows operating systems is very poor, so i mantian this brance for  for project still using CoreCompat.System.Drawing which targets  non-Windows operating systems
 
 ---------------------------------
 
