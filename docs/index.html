@@ -230,7 +230,7 @@
         <div class="badge-row">
           <img src="https://img.shields.io/nuget/v/EPPlus.Core.CoreCompat.svg?label=NuGet&color=004880" alt="NuGet" />
           <img src="https://img.shields.io/nuget/dt/EPPlus.Core.CoreCompat.svg?color=004880" alt="Downloads" />
-          <img src="https://img.shields.io/badge/.NET-Standard%202.0%20%7C%208%20%7C%209-512BD4" alt=".NET" />
+          <img src="https://img.shields.io/badge/.NET-Standard%202.0-512BD4" alt=".NET" />
           <img src="https://img.shields.io/badge/License-LGPL%20v2.1-blue" alt="License" />
         </div>
       </div>
@@ -483,37 +483,27 @@ using (var data = sheet.Cells[1, 1, 5, 4])
   <div class="container">
     <div class="text-center mb-5">
       <h2 class="fw-bold">Framework Support</h2>
-      <p class="text-secondary">One package — all modern .NET targets.</p>
+      <p class="text-secondary">One binary. Every platform.</p>
     </div>
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <table class="table tfm-table text-center">
           <thead>
-            <tr><th>Target</th><th>Status</th><th>Notes</th></tr>
+            <tr><th>Target</th><th>Status</th><th>Compatible runtimes</th></tr>
           </thead>
           <tbody>
             <tr>
               <td><i class="bi bi-dot text-success fs-4"></i> .NET Standard 2.0</td>
               <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
-              <td class="text-start text-secondary">Works on .NET Core 2.0+, .NET Framework 4.6.1+, Xamarin, Unity</td>
-            </tr>
-            <tr>
-              <td><i class="bi bi-dot text-primary fs-4"></i> .NET 8 (Windows)</td>
-              <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
-              <td class="text-start text-secondary">Full System.Drawing.Common support; LTS release</td>
-            </tr>
-            <tr>
-              <td><i class="bi bi-dot text-primary fs-4"></i> .NET 9 (Windows)</td>
-              <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
-              <td class="text-start text-secondary">Latest runtime; full feature parity with .NET 8 target</td>
+              <td class="text-start text-secondary">.NET Core 2.0+, .NET 5/6/7/8/9, .NET Framework 4.6.1+, Mono, Unity, Xamarin</td>
             </tr>
           </tbody>
         </table>
-        <div class="alert alert-secondary d-flex gap-3 align-items-start mt-3">
-          <i class="bi bi-info-circle-fill fs-5 text-secondary mt-1 flex-shrink-0"></i>
+        <div class="alert alert-success bg-opacity-10 d-flex gap-3 align-items-start mt-3">
+          <i class="bi bi-globe2 fs-5 text-success mt-1 flex-shrink-0"></i>
           <div>
-            <strong>Windows-only caveat</strong> — <code>System.Drawing.Common</code> is only supported on Windows starting with .NET 6.
-            Use the <code>netstandard2.0</code> target for cross-platform deployments (Linux / macOS).
+            <strong>Cross-platform by design.</strong> Targeting <code>netstandard2.0</code> means a single assembly runs on
+            Windows, Linux, and macOS without any platform-specific lock-in.
           </div>
         </div>
       </div>

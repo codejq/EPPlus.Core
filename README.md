@@ -18,7 +18,7 @@
 [![NuGet Downloads](https://img.shields.io/nuget/dt/EPPlus.Core.CoreCompat.svg?color=004880)](https://www.nuget.org/packages/EPPlus.Core.CoreCompat)
 [![Build](https://github.com/codejq/EPPlus.Core/actions/workflows/build.yml/badge.svg)](https://github.com/codejq/EPPlus.Core/actions/workflows/build.yml)
 [![License: LGPL v2.1](https://img.shields.io/badge/License-LGPL%20v2.1-blue.svg)](LICENSE.md)
-[![.NET](https://img.shields.io/badge/.NET-Standard%202.0%20%7C%208%20%7C%209-512BD4)](https://www.nuget.org/packages/EPPlus.Core.CoreCompat)
+[![.NET](https://img.shields.io/badge/.NET-Standard%202.0-512BD4)](https://www.nuget.org/packages/EPPlus.Core.CoreCompat)
 [![Docs](https://img.shields.io/badge/docs-GitHub%20Pages-brightgreen)](https://codejq.github.io/EPPlus.Core/)
 
 ---
@@ -33,11 +33,11 @@ The original **EPPlus** library is locked to .NET Framework. Later forks added .
   Legacy world                        This package
   ────────────                        ────────────
   EPPlus (full .NET only)             ✔  .NET Standard 2.0
-  EPPlus.Core (CoreCompat shim)  →    ✔  .NET 8  (Windows)
-  VahidN/EPPlus.Core (abandoned)      ✔  .NET 9  (Windows)
+  EPPlus.Core (CoreCompat shim)  →       Works on Windows, Linux, macOS
+  VahidN/EPPlus.Core (abandoned)         No Windows-only lock-in
 ```
 
-> No dead dependencies. No broken shims. Just Excel.
+> .NET Standard 2.0 — cross-platform by design. Runs on .NET Core, .NET Framework, Mono, Unity, Xamarin.
 
 ---
 
@@ -180,14 +180,11 @@ series.Header = "Revenue";
 
 ## Framework Support
 
-| Target               | Status  | Notes                                    |
-|----------------------|---------|------------------------------------------|
-| .NET Standard 2.0    | ✔ Full  | Works on .NET Core 2.0+, .NET Framework  |
-| .NET 8.0 (Windows)   | ✔ Full  | System.Drawing.Common requires Windows   |
-| .NET 9.0 (Windows)   | ✔ Full  | System.Drawing.Common requires Windows   |
+| Target               | Status  | Compatible runtimes                                              |
+|----------------------|---------|------------------------------------------------------------------|
+| .NET Standard 2.0    | ✔ Full  | .NET Core 2.0+, .NET 5/6/7/8/9, .NET Framework 4.6.1+, Mono    |
 
-> `System.Drawing.Common` is supported only on Windows starting with .NET 6.
-> Use the `netstandard2.0` target if you need cross-platform compatibility.
+**Cross-platform by design.** The `netstandard2.0` target means one binary runs everywhere — Windows, Linux, and macOS — without any platform-specific lock-in.
 
 ---
 

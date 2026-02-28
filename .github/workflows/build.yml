@@ -9,11 +9,7 @@ on:
 jobs:
   build:
     name: Build & verify
-    runs-on: windows-latest   # System.Drawing.Common requires Windows on .NET 8/9
-
-    defaults:
-      run:
-        shell: bash
+    runs-on: ubuntu-latest   # netstandard2.0 is cross-platform
 
     steps:
       - name: Checkout
@@ -22,9 +18,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: |
-            8.0.x
-            9.0.x
+          dotnet-version: 9.0.x
 
       - name: Build (Debug)
         run: dotnet build src/EPPlus.Core/EPPlus.Core.csproj -c Debug
@@ -32,7 +26,7 @@ jobs:
       - name: Build (Release)
         run: dotnet build src/EPPlus.Core/EPPlus.Core.csproj -c Release
 
-      - name: Pack (verify all TFMs included)
+      - name: Pack (verify nupkg)
         run: |
           dotnet pack src/EPPlus.Core/EPPlus.Core.csproj \
             -c Release \
