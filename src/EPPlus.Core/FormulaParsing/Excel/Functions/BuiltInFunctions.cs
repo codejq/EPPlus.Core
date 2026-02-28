@@ -34,6 +34,7 @@ using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Numeric;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup;
 using OfficeOpenXml.FormulaParsing.Excel.Functions.Information;
+using IndexFunction = OfficeOpenXml.FormulaParsing.Excel.Functions.RefAndLookup.Index;
 
 namespace OfficeOpenXml.FormulaParsing.Excel.Functions
 {
@@ -166,7 +167,7 @@ namespace OfficeOpenXml.FormulaParsing.Excel.Functions
             Functions["column"] = new Column(){SkipArgumentEvaluation = true};
             Functions["columns"] = new Columns(){SkipArgumentEvaluation = true};
             Functions["choose"] = new Choose();
-            Functions["index"] = new Index();
+            Functions["index"] = new IndexFunction();
             Functions["indirect"] = new Indirect();
             Functions["offset"] = new Offset(){SkipArgumentEvaluation = true};
             // Date

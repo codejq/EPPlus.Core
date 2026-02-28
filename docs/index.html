@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EPPlus.Core.CoreCompat — Excel for modern .NET</title>
+
+  <!-- Bootstrap 5.3 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Font Awesome 6 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet" />
+  <!-- highlight.js (GitHub Dark) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css" rel="stylesheet" />
+
+  <style>
+    :root {
+      --accent: #1D6F42;        /* Excel green */
+      --accent-light: #21A366;
+      --accent-glow: rgba(29,111,66,.35);
+      --surface: #161b22;
+      --surface2: #1e252e;
+      --border: rgba(255,255,255,.08);
+    }
+
+    body { background: var(--surface); font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    /* ── Navbar ─────────────────────────────────────────── */
+    .navbar {
+      background: rgba(22,27,34,.82);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .navbar-brand { font-weight: 700; letter-spacing: .02em; }
+    .nav-pill-btn {
+      background: var(--accent);
+      color: #fff;
+      border-radius: 20px;
+      padding: 6px 18px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .nav-pill-btn:hover { background: var(--accent-light); color: #fff; }
+
+    /* ── Hero ────────────────────────────────────────────── */
+    .hero {
+      min-height: 92vh;
+      display: flex;
+      align-items: center;
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(29,111,66,.28) 0%, transparent 70%),
+                  var(--surface);
+    }
+    .hero-title {
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      font-weight: 800;
+      line-height: 1.1;
+    }
+    .hero-title .accent { color: var(--accent-light); }
+    .hero-sub { font-size: 1.15rem; color: #8b949e; max-width: 540px; }
+    .install-box {
+      background: #0d1117;
+      border: 1px solid var(--accent);
+      border-radius: 10px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      max-width: 460px;
+    }
+    .install-box code { flex: 1; color: #e6edf3; font-size: .95rem; }
+    .copy-btn {
+      background: none;
+      border: none;
+      color: #8b949e;
+      cursor: pointer;
+      transition: color .2s;
+      font-size: 1.1rem;
+    }
+    .copy-btn:hover { color: var(--accent-light); }
+    .badge-row { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    /* ── Spreadsheet mockup ─────────────────────────────── */
+    .sheet-mockup {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      font-size: .82rem;
+    }
+    .sheet-toolbar {
+      background: #161b22;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .toolbar-dot { width: 12px; height: 12px; border-radius: 50%; }
+    .sheet-tab {
+      background: var(--accent);
+      color: #fff;
+      font-size: .75rem;
+      padding: 3px 14px;
+      border-radius: 4px 4px 0 0;
+      margin-left: auto;
+    }
+    .sheet-table { width: 100%; border-collapse: collapse; }
+    .sheet-table th {
+      background: #1e252e;
+      color: #8b949e;
+      text-align: center;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      font-weight: 400;
+    }
+    .sheet-table td {
+      border: 1px solid var(--border);
+      padding: 5px 10px;
+      color: #c9d1d9;
+    }
+    .sheet-table tr:first-child td {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+    .sheet-table .num { text-align: right; }
+    .sheet-table .formula { color: #58a6ff; }
+    .row-label { background: #161b22 !important; color: #8b949e; text-align: center; font-weight: 400; }
+
+    /* ── Feature cards ──────────────────────────────────── */
+    .feature-card {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px 24px;
+      height: 100%;
+      transition: border-color .25s, transform .2s;
+    }
+    .feature-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 12px;
+      background: var(--accent-glow);
+      color: var(--accent-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 14px;
+    }
+    .feature-card h5 { font-weight: 700; margin-bottom: 8px; }
+    .feature-card p { color: #8b949e; font-size: .9rem; margin: 0; }
+
+    /* ── Code tabs ──────────────────────────────────────── */
+    .code-tabs .nav-link {
+      color: #8b949e;
+      border-radius: 8px 8px 0 0;
+      padding: 8px 18px;
+      font-weight: 500;
+    }
+    .code-tabs .nav-link.active { background: #0d1117; color: #e6edf3; border-bottom-color: #0d1117; }
+    .code-pane { background: #0d1117; border: 1px solid var(--border); border-radius: 0 8px 8px 8px; padding: 0; overflow: hidden; }
+    .code-pane pre { margin: 0; }
+    .code-pane pre code { font-size: .84rem; }
+
+    /* ── Framework table ────────────────────────────────── */
+    .tfm-table { border-radius: 12px; overflow: hidden; }
+    .tfm-table th { background: var(--accent); color: #fff; padding: 12px 18px; }
+    .tfm-table td { background: var(--surface2); border-color: var(--border); padding: 12px 18px; }
+    .check { color: #3fb950; font-size: 1.1rem; }
+
+    /* ── CTA ────────────────────────────────────────────── */
+    .cta-section {
+      background: linear-gradient(135deg, var(--accent) 0%, #0e4f2b 100%);
+      border-radius: 20px;
+    }
+
+    /* ── Footer ─────────────────────────────────────────── */
+    footer { background: #0d1117; border-top: 1px solid var(--border); }
+    footer a { color: #8b949e; text-decoration: none; }
+    footer a:hover { color: var(--accent-light); }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════ NAVBAR -->
+<nav class="navbar navbar-expand-lg fixed-top">
+  <div class="container">
+    <a class="navbar-brand text-white" href="#">
+      <i class="bi bi-file-earmark-spreadsheet-fill me-2" style="color:var(--accent-light)"></i>
+      EPPlus.Core
+    </a>
+    <div class="d-flex align-items-center gap-3">
+      <a href="https://github.com/codejq/EPPlus.Core" class="text-secondary text-decoration-none d-none d-sm-inline">
+        <i class="bi bi-github fs-5"></i>
+      </a>
+      <a href="https://www.nuget.org/packages/EPPlus.Core.CoreCompat" class="nav-pill-btn">
+        <i class="bi bi-download me-1"></i> NuGet
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════════════ HERO -->
+<section class="hero pt-5">
+  <div class="container py-5">
+    <div class="row align-items-center g-5">
+
+      <div class="col-lg-6">
+        <div class="badge bg-success bg-opacity-25 text-success mb-3 fw-semibold px-3 py-2">
+          <i class="bi bi-patch-check-fill me-1"></i> Community Maintained
+        </div>
+        <h1 class="hero-title mb-4">
+          Excel for<br><span class="accent">modern .NET</span><br>without the pain
+        </h1>
+        <p class="hero-sub mb-4">
+          The community-maintained fork of EPPlus that actually works on .NET 8 and .NET 9 —
+          no broken shims, no abandoned dependencies. Create, style, chart and pivot real
+          <code>.xlsx</code> files with a fluent API.
+        </p>
+
+        <div class="install-box mb-4">
+          <i class="bi bi-terminal-fill text-success"></i>
+          <code id="installCmd">dotnet add package EPPlus.Core.CoreCompat</code>
+          <button class="copy-btn" onclick="copyInstall()" title="Copy">
+            <i class="bi bi-clipboard" id="copyIcon"></i>
+          </button>
+        </div>
+
+        <div class="badge-row">
+          <img src="https://img.shields.io/nuget/v/EPPlus.Core.CoreCompat.svg?label=NuGet&color=004880" alt="NuGet" />
+          <img src="https://img.shields.io/nuget/dt/EPPlus.Core.CoreCompat.svg?color=004880" alt="Downloads" />
+          <img src="https://img.shields.io/badge/.NET-Standard%202.0%20%7C%208%20%7C%209-512BD4" alt=".NET" />
+          <img src="https://img.shields.io/badge/License-LGPL%20v2.1-blue" alt="License" />
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="sheet-mockup shadow-lg">
+          <div class="sheet-toolbar">
+            <div class="toolbar-dot" style="background:#ff5f56"></div>
+            <div class="toolbar-dot" style="background:#ffbd2e"></div>
+            <div class="toolbar-dot" style="background:#27c93f"></div>
+            <span class="text-secondary ms-3" style="font-size:.8rem">sales_report.xlsx</span>
+            <div class="sheet-tab">Sheet1</div>
+          </div>
+          <div class="p-0">
+            <table class="sheet-table">
+              <tr>
+                <th></th><th>A</th><th>B</th><th>C</th><th>D</th>
+              </tr>
+              <tr>
+                <td class="row-label">1</td>
+                <td>Product</td><td class="num">Q1</td><td class="num">Q2</td><td class="num">Total</td>
+              </tr>
+              <tr>
+                <td class="row-label">2</td>
+                <td>Widget A</td><td class="num">1,200</td><td class="num">1,500</td>
+                <td class="num formula">=B2+C2</td>
+              </tr>
+              <tr>
+                <td class="row-label">3</td>
+                <td>Widget B</td><td class="num">800</td><td class="num">950</td>
+                <td class="num formula">=B3+C3</td>
+              </tr>
+              <tr>
+                <td class="row-label">4</td>
+                <td>Gadget X</td><td class="num">3,400</td><td class="num">2,900</td>
+                <td class="num formula">=B4+C4</td>
+              </tr>
+              <tr>
+                <td class="row-label">5</td>
+                <td style="color:#8b949e">SUM</td>
+                <td class="num formula">=SUM(B2:B4)</td>
+                <td class="num formula">=SUM(C2:C4)</td>
+                <td class="num formula">=SUM(D2:D4)</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FEATURES -->
+<section class="py-6 py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Everything EPPlus — on every .NET</h2>
+      <p class="text-secondary">Formatting, charts, formulas, pivot tables and more. All working on .NET 8 and 9.</p>
+    </div>
+    <div class="row g-4">
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-layout-text-sidebar-reverse"></i></div>
+          <h5>Styles &amp; Formatting</h5>
+          <p>Full control over fonts, fills, borders, number formats, and conditional formatting rules — pixel-perfect output.</p>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-bar-chart-fill"></i></div>
+          <h5>Charts</h5>
+          <p>Embed line, bar, column, pie, doughnut, scatter, bubble, and combination charts directly in your worksheets.</p>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-calculator-fill"></i></div>
+          <h5>Formula Engine</h5>
+          <p>Server-side evaluation of 300+ Excel functions. Recalculate workbooks without opening Excel.</p>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-table"></i></div>
+          <h5>Tables &amp; Pivot Tables</h5>
+          <p>Create Excel ListObject tables with auto-filter, and pivot tables with grouping and calculated fields.</p>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-arrow-left-right"></i></div>
+          <h5>Data Import / Export</h5>
+          <p>Load from <code>IEnumerable&lt;T&gt;</code>, <code>DataTable</code>, or CSV. Export with auto-sized columns and print-ready layouts.</p>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-lg-4">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-shield-lock-fill"></i></div>
+          <h5>Protection &amp; Encryption</h5>
+          <p>Password-protect worksheets or encrypt entire workbooks. Control edit permissions per cell range.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CODE EXAMPLES -->
+<section class="py-5" style="background:var(--surface2)">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Code Examples</h2>
+      <p class="text-secondary">From zero to spreadsheet in minutes.</p>
+    </div>
+
+    <ul class="nav nav-tabs code-tabs mb-0" id="codeTab">
+      <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-create">Create</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-read">Read</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-chart">Chart</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-load">Load List</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-style">Styles</button>
+      </li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane fade show active code-pane" id="tab-create">
+        <pre><code class="language-csharp">using OfficeOpenXml;
+using System.IO;
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+using var package = new ExcelPackage();
+var sheet = package.Workbook.Worksheets.Add("Sales");
+
+// Headers
+sheet.Cells[1, 1].Value = "Product";
+sheet.Cells[1, 2].Value = "Q1";
+sheet.Cells[1, 3].Value = "Q2";
+sheet.Cells[1, 4].Value = "Total";
+
+// Data + formula
+sheet.Cells[2, 1].Value = "Widget A";
+sheet.Cells[2, 2].Value = 1200;
+sheet.Cells[2, 3].Value = 1500;
+sheet.Cells[2, 4].Formula = "B2+C2";
+
+sheet.Cells.AutoFitColumns();
+package.SaveAs(new FileInfo("sales.xlsx"));</code></pre>
+      </div>
+      <div class="tab-pane fade code-pane" id="tab-read">
+        <pre><code class="language-csharp">using OfficeOpenXml;
+using System.IO;
+
+ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+
+using var package = new ExcelPackage(new FileInfo("sales.xlsx"));
+var sheet = package.Workbook.Worksheets[0];
+
+int rows = sheet.Dimension.Rows;
+int cols = sheet.Dimension.Columns;
+
+for (int r = 1; r &lt;= rows; r++)
+{
+    for (int c = 1; c &lt;= cols; c++)
+        Console.Write($"{sheet.Cells[r, c].Value,-15}");
+    Console.WriteLine();
+}</code></pre>
+      </div>
+      <div class="tab-pane fade code-pane" id="tab-chart">
+        <pre><code class="language-csharp">using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
+
+// ... setup sheet with data first ...
+
+var chart = sheet.Drawings.AddChart("Revenue", eChartType.ColumnClustered);
+chart.Title.Text = "Quarterly Revenue";
+chart.SetPosition(6, 0, 1, 0);
+chart.SetSize(600, 350);
+
+var series = chart.Series.Add(
+    sheet.Cells["B2:C4"],   // values
+    sheet.Cells["A2:A4"]    // categories
+);
+series.Header = "Revenue ($)";</code></pre>
+      </div>
+      <div class="tab-pane fade code-pane" id="tab-load">
+        <pre><code class="language-csharp">public record Order(int Id, string Product, decimal Amount, DateTime Date);
+
+var orders = new List&lt;Order&gt;
+{
+    new(1, "Widget A", 120.50m, DateTime.Today),
+    new(2, "Widget B",  89.99m, DateTime.Today.AddDays(-1)),
+    new(3, "Gadget X", 340.00m, DateTime.Today.AddDays(-2)),
+};
+
+// Load the list — EPPlus maps property names to column headers automatically
+sheet.Cells["A1"].LoadFromCollection(orders, printHeaders: true);
+
+// Apply a date format to the Date column
+sheet.Column(4).Style.Numberformat.Format = "yyyy-mm-dd";
+sheet.Cells.AutoFitColumns();</code></pre>
+      </div>
+      <div class="tab-pane fade code-pane" id="tab-style">
+        <pre><code class="language-csharp">using OfficeOpenXml.Style;
+using System.Drawing;
+
+// Bold green header row
+using (var header = sheet.Cells[1, 1, 1, 4])
+{
+    header.Style.Font.Bold = true;
+    header.Style.Font.Color.SetColor(Color.White);
+    header.Style.Fill.PatternType = ExcelFillStyle.Solid;
+    header.Style.Fill.BackgroundColor.SetColor(Color.FromArgb(0x1D, 0x6F, 0x42));
+}
+
+// Currency format on column D
+sheet.Column(4).Style.Numberformat.Format = "$#,##0.00";
+
+// Thin border around data range
+using (var data = sheet.Cells[1, 1, 5, 4])
+{
+    data.Style.Border.Top.Style    = ExcelBorderStyle.Thin;
+    data.Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+    data.Style.Border.Left.Style   = ExcelBorderStyle.Thin;
+    data.Style.Border.Right.Style  = ExcelBorderStyle.Thin;
+}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FRAMEWORK SUPPORT -->
+<section class="py-5">
+  <div class="container">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold">Framework Support</h2>
+      <p class="text-secondary">One package — all modern .NET targets.</p>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <table class="table tfm-table text-center">
+          <thead>
+            <tr><th>Target</th><th>Status</th><th>Notes</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><i class="bi bi-dot text-success fs-4"></i> .NET Standard 2.0</td>
+              <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="text-start text-secondary">Works on .NET Core 2.0+, .NET Framework 4.6.1+, Xamarin, Unity</td>
+            </tr>
+            <tr>
+              <td><i class="bi bi-dot text-primary fs-4"></i> .NET 8 (Windows)</td>
+              <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="text-start text-secondary">Full System.Drawing.Common support; LTS release</td>
+            </tr>
+            <tr>
+              <td><i class="bi bi-dot text-primary fs-4"></i> .NET 9 (Windows)</td>
+              <td><span class="check"><i class="bi bi-check-circle-fill"></i></span></td>
+              <td class="text-start text-secondary">Latest runtime; full feature parity with .NET 8 target</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="alert alert-secondary d-flex gap-3 align-items-start mt-3">
+          <i class="bi bi-info-circle-fill fs-5 text-secondary mt-1 flex-shrink-0"></i>
+          <div>
+            <strong>Windows-only caveat</strong> — <code>System.Drawing.Common</code> is only supported on Windows starting with .NET 6.
+            Use the <code>netstandard2.0</code> target for cross-platform deployments (Linux / macOS).
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ CTA -->
+<section class="py-5">
+  <div class="container">
+    <div class="cta-section text-center p-5">
+      <h2 class="fw-bold mb-3">Ready to generate Excel files?</h2>
+      <p class="text-white-50 mb-4">One command is all it takes.</p>
+      <div class="install-box mx-auto mb-4" style="max-width:480px">
+        <i class="bi bi-terminal-fill text-success"></i>
+        <code id="installCmd2">dotnet add package EPPlus.Core.CoreCompat</code>
+        <button class="copy-btn" onclick="copyInstall2()" title="Copy">
+          <i class="bi bi-clipboard" id="copyIcon2"></i>
+        </button>
+      </div>
+      <div class="d-flex gap-3 justify-content-center flex-wrap">
+        <a href="https://www.nuget.org/packages/EPPlus.Core.CoreCompat" class="btn btn-light fw-semibold px-4">
+          <i class="bi bi-box-seam me-2"></i>View on NuGet
+        </a>
+        <a href="https://github.com/codejq/EPPlus.Core" class="btn btn-outline-light fw-semibold px-4">
+          <i class="bi bi-github me-2"></i>GitHub
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════ FOOTER -->
+<footer class="py-4">
+  <div class="container d-flex flex-wrap justify-content-between align-items-center gap-3">
+    <div>
+      <span class="text-secondary">EPPlus.Core.CoreCompat &mdash; community fork of </span>
+      <a href="https://github.com/JanKallman/EPPlus">JanKallman/EPPlus</a>
+      <span class="text-secondary"> &middot; LGPL v2.1</span>
+    </div>
+    <div class="d-flex gap-4">
+      <a href="https://github.com/codejq/EPPlus.Core"><i class="bi bi-github me-1"></i>GitHub</a>
+      <a href="https://www.nuget.org/packages/EPPlus.Core.CoreCompat"><i class="bi bi-box-seam me-1"></i>NuGet</a>
+      <a href="https://github.com/codejq/EPPlus.Core/blob/master/LICENSE.md"><i class="bi bi-file-text me-1"></i>License</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- highlight.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  hljs.highlightAll();
+
+  function copyInstall() {
+    navigator.clipboard.writeText('dotnet add package EPPlus.Core.CoreCompat');
+    const icon = document.getElementById('copyIcon');
+    icon.className = 'bi bi-clipboard-check';
+    icon.style.color = 'var(--accent-light)';
+    setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 2000);
+  }
+  function copyInstall2() {
+    navigator.clipboard.writeText('dotnet add package EPPlus.Core.CoreCompat');
+    const icon = document.getElementById('copyIcon2');
+    icon.className = 'bi bi-clipboard-check';
+    icon.style.color = '#fff';
+    setTimeout(() => { icon.className = 'bi bi-clipboard'; icon.style.color = ''; }, 2000);
+  }
+</script>
+</body>
+</html>

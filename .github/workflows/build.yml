@@ -1,0 +1,40 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Build & verify
+    runs-on: windows-latest   # System.Drawing.Common requires Windows on .NET 8/9
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      - name: Build (Debug)
+        run: dotnet build src/EPPlus.Core/EPPlus.Core.csproj -c Debug
+
+      - name: Build (Release)
+        run: dotnet build src/EPPlus.Core/EPPlus.Core.csproj -c Release
+
+      - name: Pack (verify all TFMs included)
+        run: |
+          dotnet pack src/EPPlus.Core/EPPlus.Core.csproj \
+            -c Release \
+            -o artifacts
+          ls -la artifacts/

@@ -1,0 +1,62 @@
+name: Publish to NuGet
+
+# Triggers when you push a version tag, e.g.: git tag v2.0.0 && git push --tags
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  publish:
+    name: Pack & publish
+    runs-on: windows-latest   # System.Drawing.Common requires Windows on .NET 8/9
+    permissions:
+      contents: write         # needed to create a GitHub Release
+
+    defaults:
+      run:
+        shell: bash           # use bash on all steps so glob expansion works
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            8.0.x
+            9.0.x
+
+      # Strip the leading 'v' from the tag to get the bare version number
+      - name: Extract version from tag
+        id: version
+        run: echo "VERSION=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      # Single atomic step: restore + build + pack in one MSBuild invocation.
+      # Splitting restore and pack --no-restore causes net9.0-windows to be
+      # silently dropped from the nupkg when conditional ItemGroups are used.
+      # Use -p: (not /p:) — Git Bash on Windows strips leading / from MSBuild flags.
+      - name: Pack
+        run: |
+          dotnet pack src/EPPlus.Core/EPPlus.Core.csproj \
+            -c Release \
+            -p:Version=${{ steps.version.outputs.VERSION }} \
+            -o artifacts
+
+      - name: List artifacts (debug)
+        run: ls -la artifacts/
+
+      - name: Push to NuGet.org
+        run: |
+          dotnet nuget push artifacts/*.nupkg \
+            --api-key "${{ secrets.NUGET_API_KEY }}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          files: artifacts/*.nupkg
+          generate_release_notes: true

@@ -612,7 +612,7 @@ namespace OfficeOpenXml.Packaging.Ionic.Zip
                     n = s.Read(buffer, offset, count);
                     done = true;
                 }
-#if NETCF || SILVERLIGHT || COREFX || NETSTANDARD2_0
+#if NETCF || SILVERLIGHT || COREFX || NETSTANDARD2_0 || NET5_0_OR_GREATER
                 catch (System.IO.IOException)
                 {
                     throw;
